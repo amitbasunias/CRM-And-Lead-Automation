@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lead Lists</title>
+  <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+
+  <!-- Fonts and icons -->
+  <script src="{{ url_for('static', filename='js/plugin/webfont/webfont.min.js') }}"></script>
+  <script>
+    WebFont.load({
+      google: { families: ["Public Sans:300,400,500,600,700"] },
+      custom: {
+        families: [
+          "Font Awesome 5 Solid",
+          "Font Awesome 5 Regular",
+          "Font Awesome 5 Brands",
+          "simple-line-icons",
+        ],
+        urls: ["{{ url_for('static', filename='css/fonts.min.css') }}"],
+      },
+      active: function () {
+        sessionStorage.fonts = true;
+      },
+    });
+  </script>
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/kaiadmin.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+</head>
+<body>
+  <div class="wrapper sidebar_minimize">
+    <!-- Sidebar -->
+
+          <div class="sidebar" data-background-color="light">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="light">
+            <a href="/" class="logo">
+             LOGO
+            </a>
+
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item">
+                <a href="/">
+                  <i class="fas fa-home"></i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+
+               <li class="nav-item active">
+                <a href="/analytics">
+                <i class="fas fa-chart-line"></i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="/leads">
+                <i class="fas fa-filter"></i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="/leads">
+                <i class="fas fa-filter"></i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    <!-- Include your sidebar structure here -->
+
+    <!-- Main Panel -->
+    <div class="main-panel">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h4 class="card-title"Lead Details</h4>
+              </div>
+            <div class="card-body">
+                <h2>{{ lead.firstname }} {{ lead.lastname }}</h2>
+                <p><strong>Phone:</strong> {{ lead.phone }}</p>
+                <p><strong>Email:</strong> {{ lead.email }}</p>
+                <p><strong>Status:</strong> {{ lead.status }}</p>
+                <p><strong>Address:</strong> {{ lead.address }}, {{ lead.city }}, {{ lead.state }}, {{ lead.country }}, {{ lead.zip }}</p>
+            </div>
+            </div>
+              {% if lead.properties %}
+        <h3>Associated Properties</h3>
+        <div class="row">
+            {% for property in lead.properties %}
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ property.propertyaddress }}</h5>
+                        <p><strong>Size:</strong> {{ property.size }} sq ft</p>
+                        <p><strong>Beds:</strong> {{ property.beds }}</p>
+                        <p><strong>Baths:</strong> {{ property.baths }}</p>
+                        <p><strong>Type:</strong> {{ property.type }}</p>
+                        <p><strong>Living Area:</strong> {{ property.livingarea }} sq ft</p>
+                        <p><strong>Features:</strong> {{ property.features }}</p>
+                        <p><strong>Year Built:</strong> {{ property.yearsbuilt }}</p>
+                        <p><strong>Occupancy:</strong> {{ property.occupancy }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No associated properties found for this lead.</p>
+        {% endif %}
+          </div>
+        </div>
+
+                <a href="{{ url_for('leads') }}" class="btn btn-secondary mt-4">Back to All Leads</a>
+        <a href="{{ url_for('view_lead_lists') }}" class="btn btn-secondary mt-4">Back to Leads List</a>
+
+      </div>
+    </div>
+
+    <!-- Core JS Files -->
+    <script src="{{ url_for('static', filename='js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/kaiadmin.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script>
+
+    </script>
+  </div>
+</body>
+</html>

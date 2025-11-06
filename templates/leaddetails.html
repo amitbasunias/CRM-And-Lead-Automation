@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <h1>Lead Details</h1>
+
+        <div class="card my-4">
+            <div class="card-body">
+                <h2>{{ lead.firstname }} {{ lead.lastname }}</h2>
+                <p><strong>Phone:</strong> {{ lead.phone }}</p>
+                <p><strong>Email:</strong> {{ lead.email }}</p>
+                <p><strong>Status:</strong> {{ lead.status }}</p>
+                <p><strong>Address:</strong> {{ lead.address }}, {{ lead.city }}, {{ lead.state }}, {{ lead.country }}, {{ lead.zip }}</p>
+            </div>
+        </div>
+
+        {% if lead.properties %}
+        <h3>Associated Properties</h3>
+        <div class="row">
+            {% for property in lead.properties %}
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ property.propertyaddress }}</h5>
+                        <p><strong>Size:</strong> {{ property.size }} sq ft</p>
+                        <p><strong>Beds:</strong> {{ property.beds }}</p>
+                        <p><strong>Baths:</strong> {{ property.baths }}</p>
+                        <p><strong>Type:</strong> {{ property.type }}</p>
+                        <p><strong>Living Area:</strong> {{ property.livingarea }} sq ft</p>
+                        <p><strong>Features:</strong> {{ property.features }}</p>
+                        <p><strong>Year Built:</strong> {{ property.yearsbuilt }}</p>
+                        <p><strong>Occupancy:</strong> {{ property.occupancy }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No associated properties found for this lead.</p>
+        {% endif %}
+
+        <a href="{{ url_for('leads') }}" class="btn btn-secondary mt-4">Back to Leads List</a>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Campaign</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <h1>{{ campaign.name }}</h1>
+        <p>{{ campaign.description }}</p>
+
+        <h3>Lead Lists Associated with this Campaign</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Lead List Name</th>
+                        <th>Description</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead_list in campaign.lead_lists %}
+                    <tr>
+                        <td>{{ lead_list.name }}</td>
+                        <td>{{ lead_list.description }}</td>
+                        <td>{{ lead_list.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <a href="{{ url_for('view_lead_list', lead_list_id=lead_list.id) }}" class="btn btn-primary btn-sm">
+                                View List
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="{{ url_for('campaignlist') }}" class="btn btn-secondary mt-3">Back to Campaign List</a>
+    </div>
+</body>
+</html>

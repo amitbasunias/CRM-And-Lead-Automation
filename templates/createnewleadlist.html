@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Lead List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-5">
+    <h1>Create Lead List</h1>
+
+    <form action="{{ url_for('create_lead_list') }}" method="POST" id="leadlist-form">
+        <div class="form-group">
+            <label for="name">List Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group mt-4">
+            <label for="lead-search">Search Leads</label>
+            <input type="text" class="form-control" id="lead-search" placeholder="Type to search leads...">
+            <ul class="list-group mt-2" id="search-results" style="display: none;"></ul>
+        </div>
+
+        <h3 class="mt-4">Selected Leads</h3>
+        <ul class="list-group mb-3" id="selected-leads">
+            <!-- Selected leads will appear here -->
+        </ul>
+
+        <button type="submit" class="btn btn-primary">Create Lead List</button>
+        <a href="{{ url_for('view_lead_lists') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Search for leads
+        $('#lead-search').on('input', function () {
+            const query = $(this).val().trim();
+            if (query.length > 0) {
+                $.ajax({
+                    url: "{{ url_for('search_lead') }}",
+                    method: "GET",
+                    data: { query: query },
+                    success: function (data) {
+                        $('#search-results').empty().show();
+                        data.forEach(function (lead) {
+                            $('#search-results').append(
+                                `<li class="list-group-item lead-item" data-id="${lead.id}" data-name="${lead.name}">
+                                    ${lead.name}
+                                </li>`
+                            );
+                        });
+                    }
+                });
+            } else {
+                $('#search-results').hide();
+            }
+        });
+
+        // Add selected lead
+        $(document).on('click', '.lead-item', function () {
+            const leadId = $(this).data('id');
+            const leadName = $(this).data('name');
+
+            // Prevent duplicate selections
+            if ($('#selected-leads input[value="' + leadId + '"]').length === 0) {
+                $('#selected-leads').append(
+                    `<li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${leadName}
+                        <button type="button" class="btn btn-danger btn-sm remove-lead" data-id="${leadId}">
+                            Remove
+                        </button>
+                        <input type="hidden" name="selected_leads" value="${leadId}">
+                    </li>`
+                );
+            }
+
+            // Hide search results and clear search input
+            $('#search-results').hide().empty();
+            $('#lead-search').val('');
+        });
+
+        // Remove selected lead
+        $(document).on('click', '.remove-lead', function () {
+            $(this).closest('li').remove();
+        });
+    });
+</script>
+</body>
+</html>

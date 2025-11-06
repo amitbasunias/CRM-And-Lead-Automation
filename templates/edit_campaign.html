@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Campaign</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <h1>Edit Campaign</h1>
+        <form method="POST" action="{{ url_for('edit_campaign', campaign_id=campaign.id) }}">
+            <div class="form-group">
+                <label for="name">Campaign Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ campaign.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3">{{ campaign.description }}</textarea>
+            </div>
+
+            <h3>Associated Lead Lists</h3>
+            <ul class="list-group mb-3" id="associated-lead-lists">
+                {% for lead_list in campaign.lead_lists %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ lead_list.name }}
+                        <input type="checkbox" name="lead_list_ids" value="{{ lead_list.id }}" checked>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="form-group">
+                <label for="leadlist-search">Search and Add New Lead Lists</label>
+                <input type="text" class="form-control" id="leadlist-search" placeholder="Type to search lead lists...">
+                <ul class="list-group mt-2" id="search-results" style="display: none;"></ul>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+            <a href="{{ url_for('campaignlist') }}" class="btn btn-secondary mt-3">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#leadlist-search').on('input', function() {
+                const query = $(this).val().trim();
+                if (query.length > 0) {
+                    $.ajax({
+                        url: "{{ url_for('search_lead_lists') }}",
+                        method: "GET",
+                        data: { query: query },
+                        success: function(data) {
+                            $('#search-results').empty().show();
+                            data.forEach(function(leadList) {
+                                $('#search-results').append(
+                                    `<li class="list-group-item lead-list-item" data-id="${leadList.id}" data-name="${leadList.name}">
+                                        ${leadList.name}
+                                    </li>`
+                                );
+                            });
+                        }
+                    });
+                } else {
+                    $('#search-results').hide();
+                }
+            });
+
+            $(document).on('click', '.lead-list-item', function() {
+                const leadListId = $(this).data('id');
+                const leadListName = $(this).data('name');
+
+                if ($('#associated-lead-lists input[value="' + leadListId + '"]').length === 0) {
+                    $('#associated-lead-lists').append(
+                        `<li class="list-group-item d-flex justify-content-between align-items-center">
+                            ${leadListName}
+                            <input type="checkbox" name="lead_list_ids" value="${leadListId}" checked>
+                        </li>`
+                    );
+                }
+
+                $('#search-results').hide().empty();
+                $('#leadlist-search').val('');
+            });
+        });
+    </script>
+</body>
+</html>

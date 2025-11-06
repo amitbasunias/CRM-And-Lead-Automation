@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}Home{% endblock %}</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+
+
+    <!-- Fonts and icons -->
+  <!-- JS Files -->
+<script src="{{ url_for('static', filename='js/plugin/webfont/webfont.min.js') }}"></script>
+<script>
+  WebFont.load({
+    google: { families: ["Public Sans:300,400,500,600,700"] },
+    custom: {
+      families: [
+        "Font Awesome 5 Solid",
+        "Font Awesome 5 Regular",
+        "Font Awesome 5 Brands",
+        "simple-line-icons",
+      ],
+      urls: ["{{ url_for('static', filename='css/fonts.min.css') }}"],
+    },
+    active: function () {
+      sessionStorage.fonts = true;
+    },
+  });
+</script>
+
+<!-- CSS Files -->
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.min.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/kaiadmin.min.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+
+
+
+  </head>
+  <body>
+    <div class="wrapper sidebar_minimize">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="light">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="light">
+            <a href="/" class="logo">
+             LOGO
+            </a>
+
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item">
+                <a href="/">
+                  <i class="fas fa-home"></i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+
+               <li class="nav-item ">
+                <a href="/analytics">
+                <i class="fas fa-chart-line"></i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="/leads">
+                <i class="fas fa-filter"></i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+
+              <li class="nav-item active">
+                <a href="/campaign">
+                <i class="fas fa-bullseye"</i>
+                  <span class="caret"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+              <a href="/" class="logo">
+               LOGO
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+          <!-- Navbar Header -->
+          <nav
+            class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+          >
+            <div class="container-fluid">
+              <nav
+                class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
+              >
+
+  {% block header_content %}
+            <h2>Welcome</h2>
+        {% endblock %}              </nav>
+
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+
+
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                  <a
+                    class="dropdown-toggle profile-pic"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-sm">
+
+                    </div>
+                    <span class="profile-username">
+                    User
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                      <li>
+                        <a class="dropdown-item" href="#">Logout</a>
+                      </li>
+
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+        </div>
+
+        <div class="container campaigncard">
+          <div class="row ">
+              <aside class="sticky-aside col-md-2">
+          <ul class="secondnav">
+                <li class="item "><a href="/campaign">All Campaign</a></li>
+        <li class="item active"><a href={{ url_for('add_campaign') }}>Add New Campaign</a></li>
+          </ul>
+          </aside>
+
+      <div class="col-md-9">
+                                <div class="card">
+
+        <form action="{{ url_for('add_campaign') }}" method="POST" id="campaign-form">
+            <div class="form-group">
+                <label for="name">Campaign Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="leadlist-search">Search Lead Lists</label>
+                <input type="text" class="form-control" id="leadlist-search" placeholder="Type to search lead lists...">
+                <ul class="list-group mt-2" id="search-results" style="display: none;"></ul>
+            </div>
+
+            <h3 class="mt-4">Selected Lead Lists</h3>
+            <ul class="list-group mb-3" id="selected-lead-lists">
+                <!-- Selected lead lists will appear here -->
+            </ul>
+
+            <button type="submit" class="btn btn-primary">Create Campaign</button>
+            <a href="{{ url_for('campaignlist') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+                                </div>
+                    </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+      <!-- Custom template | don't include it in your project! -->
+      <!-- End Custom template -->
+
+    <!--   Core JS Files   -->
+
+
+
+<script src="{{ url_for('static', filename='js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/core/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/core/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kaiadmin.min.js') }}"></script>
+      <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+
+  <script   <script>
+        $(document).ready(function() {
+            // AJAX search for lead lists
+            $('#leadlist-search').on('input', function() {
+                const query = $(this).val().trim();
+                if (query.length > 0) {
+                    $.ajax({
+                        url: "{{ url_for('search_lead_lists') }}",
+                        method: "GET",
+                        data: { query: query },
+                        success: function(data) {
+                            $('#search-results').empty().show();
+                            data.forEach(function(leadList) {
+                                $('#search-results').append(
+                                    `<li class="list-group-item lead-list-item" data-id="${leadList.id}" data-name="${leadList.name}">
+                                        ${leadList.name}
+                                    </li>`
+                                );
+                            });
+                        }
+                    });
+                } else {
+                    $('#search-results').hide();
+                }
+            });
+
+            // Add selected lead list to the form
+            $(document).on('click', '.lead-list-item', function() {
+                const leadListId = $(this).data('id');
+                const leadListName = $(this).data('name');
+
+                // Check if already selected
+                if ($('#selected-lead-lists input[value="' + leadListId + '"]').length === 0) {
+                    $('#selected-lead-lists').append(
+                        `<li class="list-group-item d-flex justify-content-between align-items-center">
+                            ${leadListName}
+                            <button type="button" class="btn btn-danger btn-sm remove-lead-list" data-id="${leadListId}">
+                                Remove
+                            </button>
+                            <input type="hidden" name="lead_list_ids" value="${leadListId}">
+                        </li>`
+                    );
+                }
+
+                // Hide search results and clear search input
+                $('#search-results').hide().empty();
+                $('#leadlist-search').val('');
+            });
+
+            // Remove selected lead list
+            $(document).on('click', '.remove-lead-list', function() {
+                $(this).closest('li').remove();
+            });
+        });
+    </script>
+  </body>
+</html>
